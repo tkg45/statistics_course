@@ -1,0 +1,331 @@
+---
+title: "Probability, Matrix Algebra"
+author: "45tkg"
+date: "12/22/2021"
+output: 
+  html_document:
+    toc: true
+    theme: united
+header-includes: \usepackage{luatexja}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Random Variables
+
+### Density function密度関数
+
+Density functions represent realization patterns of continuous random variables. The following is the density function of the standard normal distribution:
+$$\phi(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{- \frac{(x-\mu)^2}{2\sigma^2}\right\}$$
+
+```{r normal-density}
+x <- seq(-5, 5, length=100)
+y <- dnorm(x, mean=0, sd=1)
+plot(x, y, type="l")
+```
+
+The function **dnorm** means the density of a normal distribution. Similarly, **dt**, **dchisq**, and **dunif** are functions for the density of t, chi-squared, uniform distribution.
+
+### Probability
+
+The function **pnorm**
+
+```{r probs}
+p1 <- pnorm(2)                        # Pr[ X < 2 ]
+p2 <- 1-pnorm(2)                      # Pr[ X > 2 ]
+p3 <- pnorm(2, lower.tail=FALSE)      # Pr[ X > 2 ]
+p4 <- pnorm(1)-pnorm(-2)              # Pr[ -2 < X < 1 ]
+print(c(p1, p2, p3, p4))
+```
+
+```{r prob-norm, echo=FALSE}
+x <- seq(-5, 5, length=100)
+y <- dnorm(x, mean=0, sd=1)
+plot(x,y,type="l")
+xvals <- seq(-2,1,  length=20)    
+dvals <- dnorm(xvals,mean=0,sd=1)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="red") 
+arrows(-3.5, 0.2, -1.7, .12)
+text(-3.5,0.22,"Pr[ -2.0 < Z < 1.0]")
+#
+xvals <- seq(2,5,  length=20)    
+dvals <- dnorm(xvals, mean=0, sd=1)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="blue") 
+arrows(3, 0.2, 2.5, .035)
+text(3, 0.22, "Pr[ Z > 2.0]")
+```
+
+The function **qnorm** is quantile function for the normal distribution.
+
+```{r}
+q1 <- qnorm(0.95)               # { x : Pr[ X < x ] = 0.95}
+print(q1)
+```
+
+```{r q-norm, echo=FALSE}
+x <- seq(-5, 5, length=100)
+y <- pnorm(x)
+plot(x, y, type="l",lwd=2)
+lines(c(-6,qnorm(.95)), c(.95,.95), lt=3, lwd=2.5,col="red")
+lines(c(qnorm(.95),qnorm(.95)), c(.95,-1), lt=3, lwd=2.5,col="red")
+arrows(3.0, 0.4, qnorm(.95)+0.1, .005)
+text(3.5,0.48,"Pr[ Z < z ] = 0.95")
+text(3.5,0.43,"( z = 1.64 )   ")
+```
+
+
+```{r t-both, echo=FALSE}
+x <- seq(-5, 5, length=100)
+y <- dt(x, df=3)
+plot(x,y,type="l",ylim=c(0,0.4))
+#xvals <- seq(-2,1,  length=20)    
+#dvals <- dt(xvals,df=3)
+#polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="red") 
+#arrows(-3.5, 0.2, -1.7, .12)
+#text(-3.5,0.22,"Pr[ -2.0 < X < 1.0]")
+#
+xvals <- seq(qt(0.95,df=3),5,  length=20)    
+dvals <- dt(xvals,df=3)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="yellow") 
+arrows(3.5, 0.18, qt(0.95,df=3), 0.0)
+h1 <- expression(paste( Pr( Z < alpha ) == 0.95))
+h2 <- expression(paste( Pr( Z > alpha ) == 0.05))
+h3 <- expression(paste( ( alpha  == 1.64 ) ) )
+text(3.5,0.26,h1)
+text(3.5,0.23,h2)
+text(3.5,0.20,h3)
+```
+
+## Other distributions
+
+### t distribution
+
+```{r t-prob-n}
+pt(1, df=3) - pt(-2, df=3)        # Pr[ 1 < X < 3 ]
+```
+
+```{r t-prob-f, echo=FALSE}
+x <- seq(-5, 5, length=100)
+y <- dt(x, df=3)
+plot(x, y, type="l")
+xvals <- seq(-2, 1, length=20)    
+dvals <- dt(xvals, df=3)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="red") 
+arrows(-3.5, 0.2, -1.7, .12)
+text(-3.5,0.22,"Pr[ -2.0 < T < 1.0 ]")
+```
+
+```{r t-q-n}
+qt(0.60, df=3)
+```
+
+```{r t-q-f, echo=FALSE}
+x <- seq(-5, 5, length=100)
+y <- pt(x, df=3)
+plot(x, y, type="l",lwd=2)
+lines(c(-6,qt(.60, df=3)), c(.6,.6), lt=3, lwd=2.5,col="red")
+lines(c(qt(.60, df=3),qt(.60, df=3)), c(.60,-1), lt=3, lwd=2.5,col="red")
+arrows(3.0, 0.4, qt(.6,df=3)+0.1, .005)
+text(2.5,0.48,"Pr[ T < t ] = 0.60")
+text(2.5,0.42,"(t = 0.2766707)")
+```
+
+### Chi-squared distribution
+
+```{r c-prob-n}
+pchisq(3, df=5)-pchisq(1, df=5)   # Pr[ 1 < X < 3 ]
+```
+
+```{r c-prob-f, echo=FALSE}
+x <- seq(0, 15, length=100)
+y <- dchisq(x, df=5)
+plot(x, y, type="l")
+xvals <- seq(1, 3, length=20)    
+dvals <- dchisq(xvals, df=5)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="red") 
+arrows(9.5, 0.1, 3.2, 0.1)
+text(12.0, 0.1, "Pr[ 1.0 < X < 3.0 ]")
+```
+
+```{r c-q-n}
+qchisq(0.60, df=5)
+```
+
+```{r c-q-f, echo=FALSE}
+x <- seq(0, 15, length=100)
+y <- pchisq(x, df=5)
+plot(x, y, type="l",lwd=2)
+lines(c(-6,qchisq(.60, df=5)), c(.6,.6), lt=3, lwd=2.5,col="red")
+lines(c(qchisq(.60, df=5),qchisq(.60, df=5)), c(.60,-1), lt=3, lwd=2.5,col="red")
+arrows(10.0, 0.4, qchisq(.6, df=5)+0.1, .001)
+text(10, 0.51,"Pr[ X < x ] = 0.60")
+text(10, 0.45,"(x = 5.131867)")
+```
+
+
+### F distribution
+
+```{r f-prob-n}
+pf(3, df1=4, df2=10)-pf(1, df1=4, df2=10)
+```
+
+```{r f-prob-f, echo=FALSE}
+x <- seq(0, 5, length=100)
+y <- df(x, df1=10, df2=10)
+plot(x, y, type="l")
+xvals <- seq(1, 3, length=20)    
+dvals <- df(xvals, df1=10, df2=10)
+polygon(c(xvals,rev(xvals)),c(rep(0,20),rev(dvals)),col="red") 
+arrows(3.5, 0.5, 2, .2)
+text(3.5, 0.52, "Pr[ 1.0 < F < 3.0 ]")
+```
+
+```{r f-q-n}
+qf(0.60, df1=4,df2=10)
+```
+
+```{r f-q-f, echo=FALSE}
+x <- seq(0, 5, length=100)
+y <- pf(x, df1=10, df2=10)
+plot(x, y, type="l", lwd=2)
+lines(c(-6,qf(.60, df1=10,df2=10)), c(.6,.6), lt=3, lwd=2.5,col="red")
+lines(c(qf(.60, df1=10,df2=10),qf(.60, df1=10,df2=10)), c(.60,-1), lt=3, lwd=2.5,col="red")
+arrows(3.0, 0.4, qf(.60, df1=10,df2=10)+0.1, .001)
+text(3.5, 0.51,"Pr[ F < f ] = 0.60")
+text(3.5, 0.45,"(f = 1.120273)")
+```
+
+### Bivariate Normal distribution
+```{r bn-1}
+binorm <- function(x, m, Sig){
+  exp(-.5 * diag(t(x-m) %*% solve(Sig) %*% (x-m))) / sqrt(2 * pi * det(Sig))
+}
+m   <- c(0,0)
+Sig0 <- matrix(c(1.0, 0.0, 0.0, 1.0), 2, 2)
+Sig5 <- matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
+x  <- seq(-3, 3, length=50)
+y  <- seq(-3, 3, length=50)
+#### z ###############################################
+fxy0      <- binorm( t(expand.grid(x,y)), m, Sig0)
+dim(fxy0) <- c(length(x),length(y))
+fxy5      <- binorm( t(expand.grid(x,y)), m, Sig5)
+dim(fxy5) <- c(length(x),length(y))
+###################################################################
+#library(rgl)
+#surface3d(x, y, fxy5, theta = 345, phi = 35,col="blue",front="lines")
+```
+
+```{r}
+par(cex.lab=2)
+par(cex.axis=1.75)
+par(las=1)
+par(mfrow=c(3,2))  # 1.5:1 aspect ratio
+
+####################################################################
+####################################################################
+  ## Perspective Plot
+  persp(x, y, fxy0, theta = 15, phi = 40,col="white",main="Bivariate Normal Density (corr=0.0)")
+  persp(x, y, fxy5, theta = 15, phi = 40,col="white",main="Bivariate Normal Density (corr=0.5)")
+  #mtext(expr.seq[j])
+
+####################################################################
+  ## Contour Plot
+####################################################################
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy0, col="blue", drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main="Contour / Conditional Density at X=0.7",
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = "i", yaxs = "i")
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+##############################################
+abline(v=.7,  lwd=1.5, lty=2, col="blue")
+##############################################
+```
+
+
+
+```{r}
+####################################################################
+  ## Contour Plot
+####################################################################
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy5, col="blue", drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main="Contour / Conditional Density at X=0.7",
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = "i", yaxs = "i")
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+##############################################
+abline(v=.7,  lwd=1.5, lty=2, col="blue")
+##############################################
+
+###############################################################
+f    <- function(x1,x2) binorm(t(cbind(x1,x2)), m, Sig5)
+###############################################################
+x.s  <- seq(from=min(x), to=max(x), by=0.1)
+vals <- f(0.7, x.s)
+fx <- dnorm(0.7, m[1], Sig5[1,1]^0.5)
+lines( vals-abs(min(x)), x.s, lty=2, lwd=1.5, col="blue")
+lines( vals/fx-abs(min(x)), x.s, lty=1, lwd=1.5, col="red")
+###############################################################
+text(1, -2, labels=expression(X==0.7))
+text(-2.0, 1.5, labels=expression( f(y / x==0.7) ), col="red")
+text(-2.2, 0.5, labels=expression( f(0.7, y) ),     col="blue")
+legend(-2, 3, c("sectional view at x=0.7","condi. dens. of Y at x=0.7"),
+lty=c(2,1),col=c("blue","red"),lwd=1.5)
+```
+
+
+
+```{r}
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy0, col="blue", drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main="Contour / Marginal Density", 
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = "i", yaxs = "i")
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+###############################################################
+# Marginal density function: Left side solid
+###############################################################
+marginal.X <- function(x)  exp(-(x-m[1])^2/(2*Sig0[1,1])) / (sqrt(2*pi*Sig0[1,1]))
+# Left side solid
+vals <- marginal.X(x.s)
+lines(vals-abs(min(x)), x.s, lty=1, lwd=2, col="red")
+text(-2.3, 0.5, labels=expression( f(y) ), col="red")
+legend(-2, 2.8, c("marginal denssity of Y"),lty=c(1),col=c("red"),lwd=2)
+```
+
+
+```{r}
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy5, col="blue", drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main="Contour / Marginal Density", 
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = "i", yaxs = "i")
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+###############################################################
+# Marginal density function: Left side solid
+###############################################################
+marginal.X <- function(x)  exp(-(x-m[1])^2/(2*Sig5[1,1])) / (sqrt(2*pi*Sig5[1,1]))
+# Left side solid
+vals <- marginal.X(x.s)
+lines(vals-abs(min(x)), x.s, lty=1, lwd=2, col="red")
+text(-2.3, 0.5, labels=expression( f(y) ), col="red")
+legend(-2, 2.8, c("marginal density of Y"),lty=c(1),col=c("red"),lwd=2)
+```
+
+
+
+## Matrix Algebra
+
+
+

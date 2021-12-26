@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="45tkg" />
+
+<meta name="date" content="2021-12-22" />
+
+<title>Probability, Matrix Algebra</title>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<link href="libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="libs/highlightjs-9.12.0/highlight.js"></script>
+<link href='libs/fluidbox/css/fluidbox.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<link href='include/css/style.css' rel='stylesheet' type='text/css'>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="./index.html">Title</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="https://github.com/yutannihilation/rmarkdown-website-template">Github</a></li>
+        <li class="dropdown">
+          <a href="authoring" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Pages<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">          <li><a href="test.html">test</a></li>
+          <li><a href="test2.html">test2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Probability, Matrix Algebra</h1>
+<h4 class="author">45tkg</h4>
+<h4 class="date">12/22/2021</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#random-variables">Random Variables</a>
+<ul>
+<li><a href="#density-function密度関数">Density function密度関数</a></li>
+<li><a href="#probability">Probability</a></li>
+</ul></li>
+<li><a href="#other-distributions">Other distributions</a>
+<ul>
+<li><a href="#t-distribution">t distribution</a></li>
+<li><a href="#chi-squared-distribution">Chi-squared distribution</a></li>
+<li><a href="#f-distribution">F distribution</a></li>
+<li><a href="#bivariate-normal-distribution">Bivariate Normal distribution</a></li>
+</ul></li>
+<li><a href="#matrix-algebra">Matrix Algebra</a></li>
+</ul>
+</div>
+
+<div id="random-variables" class="section level2">
+<h2>Random Variables</h2>
+<div id="density-function密度関数" class="section level3">
+<h3>Density function密度関数</h3>
+<p>Density functions represent realization patterns of continuous random variables. The following is the density function of the standard normal distribution: <span class="math display">$$\phi(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{- \frac{(x-\mu)^2}{2\sigma^2}\right\}$$</span></p>
+<pre class="r"><code>x &lt;- seq(-5, 5, length=100)
+y &lt;- dnorm(x, mean=0, sd=1)
+plot(x, y, type=&quot;l&quot;)</code></pre>
+<p><img src="note2_files/figure-html/normal-density-1.png" width="672" /></p>
+<p>The function <strong>dnorm</strong> means the density of a normal distribution. Similarly, <strong>dt</strong>, <strong>dchisq</strong>, and <strong>dunif</strong> are functions for the density of t, chi-squared, uniform distribution.</p>
+</div>
+<div id="probability" class="section level3">
+<h3>Probability</h3>
+<p>The function <strong>pnorm</strong></p>
+<pre class="r"><code>p1 &lt;- pnorm(2)                        # Pr[ X &lt; 2 ]
+p2 &lt;- 1-pnorm(2)                      # Pr[ X &gt; 2 ]
+p3 &lt;- pnorm(2, lower.tail=FALSE)      # Pr[ X &gt; 2 ]
+p4 &lt;- pnorm(1)-pnorm(-2)              # Pr[ -2 &lt; X &lt; 1 ]
+print(c(p1, p2, p3, p4))</code></pre>
+<pre><code>## [1] 0.97724987 0.02275013 0.02275013 0.81859461</code></pre>
+<p><img src="note2_files/figure-html/prob-norm-1.png" width="672" /></p>
+<p>The function <strong>qnorm</strong> is quantile function for the normal distribution.</p>
+<pre class="r"><code>q1 &lt;- qnorm(0.95)               # { x : Pr[ X &lt; x ] = 0.95}
+print(q1)</code></pre>
+<pre><code>## [1] 1.644854</code></pre>
+<p><img src="note2_files/figure-html/q-norm-1.png" width="672" /></p>
+<p><img src="note2_files/figure-html/t-both-1.png" width="672" /></p>
+</div>
+</div>
+<div id="other-distributions" class="section level2">
+<h2>Other distributions</h2>
+<div id="t-distribution" class="section level3">
+<h3>t distribution</h3>
+<pre class="r"><code>pt(1, df=3) - pt(-2, df=3)        # Pr[ 1 &lt; X &lt; 3 ]</code></pre>
+<pre><code>## [1] 0.7348359</code></pre>
+<p><img src="note2_files/figure-html/t-prob-f-1.png" width="672" /></p>
+<pre class="r"><code>qt(0.60, df=3)</code></pre>
+<pre><code>## [1] 0.2766707</code></pre>
+<p><img src="note2_files/figure-html/t-q-f-1.png" width="672" /></p>
+</div>
+<div id="chi-squared-distribution" class="section level3">
+<h3>Chi-squared distribution</h3>
+<pre class="r"><code>pchisq(3, df=5)-pchisq(1, df=5)   # Pr[ 1 &lt; X &lt; 3 ]</code></pre>
+<pre><code>## [1] 0.2625799</code></pre>
+<p><img src="note2_files/figure-html/c-prob-f-1.png" width="672" /></p>
+<pre class="r"><code>qchisq(0.60, df=5)</code></pre>
+<pre><code>## [1] 5.131867</code></pre>
+<p><img src="note2_files/figure-html/c-q-f-1.png" width="672" /></p>
+</div>
+<div id="f-distribution" class="section level3">
+<h3>F distribution</h3>
+<pre class="r"><code>pf(3, df1=4, df2=10)-pf(1, df1=4, df2=10)</code></pre>
+<pre><code>## [1] 0.3792318</code></pre>
+<p><img src="note2_files/figure-html/f-prob-f-1.png" width="672" /></p>
+<pre class="r"><code>qf(0.60, df1=4,df2=10)</code></pre>
+<pre><code>## [1] 1.120273</code></pre>
+<p><img src="note2_files/figure-html/f-q-f-1.png" width="672" /></p>
+</div>
+<div id="bivariate-normal-distribution" class="section level3">
+<h3>Bivariate Normal distribution</h3>
+<pre class="r"><code>binorm &lt;- function(x, m, Sig){
+  exp(-.5 * diag(t(x-m) %*% solve(Sig) %*% (x-m))) / sqrt(2 * pi * det(Sig))
+}
+m   &lt;- c(0,0)
+Sig0 &lt;- matrix(c(1.0, 0.0, 0.0, 1.0), 2, 2)
+Sig5 &lt;- matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
+x  &lt;- seq(-3, 3, length=50)
+y  &lt;- seq(-3, 3, length=50)
+#### z ###############################################
+fxy0      &lt;- binorm( t(expand.grid(x,y)), m, Sig0)
+dim(fxy0) &lt;- c(length(x),length(y))
+fxy5      &lt;- binorm( t(expand.grid(x,y)), m, Sig5)
+dim(fxy5) &lt;- c(length(x),length(y))
+###################################################################
+#library(rgl)
+#surface3d(x, y, fxy5, theta = 345, phi = 35,col=&quot;blue&quot;,front=&quot;lines&quot;)</code></pre>
+<pre class="r"><code>par(cex.lab=2)
+par(cex.axis=1.75)
+par(las=1)
+par(mfrow=c(3,2))  # 1.5:1 aspect ratio
+
+####################################################################
+####################################################################
+  ## Perspective Plot
+  persp(x, y, fxy0, theta = 15, phi = 40,col=&quot;white&quot;,main=&quot;Bivariate Normal Density (corr=0.0)&quot;)
+  persp(x, y, fxy5, theta = 15, phi = 40,col=&quot;white&quot;,main=&quot;Bivariate Normal Density (corr=0.5)&quot;)
+  #mtext(expr.seq[j])
+
+####################################################################
+  ## Contour Plot
+####################################################################
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy0, col=&quot;blue&quot;, drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main=&quot;Contour / Conditional Density at X=0.7&quot;,
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = &quot;i&quot;, yaxs = &quot;i&quot;)
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+##############################################
+abline(v=.7,  lwd=1.5, lty=2, col=&quot;blue&quot;)
+##############################################</code></pre>
+<p><img src="note2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>####################################################################
+  ## Contour Plot
+####################################################################
+par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy5, col=&quot;blue&quot;, drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main=&quot;Contour / Conditional Density at X=0.7&quot;,
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = &quot;i&quot;, yaxs = &quot;i&quot;)
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+##############################################
+abline(v=.7,  lwd=1.5, lty=2, col=&quot;blue&quot;)
+##############################################
+
+###############################################################
+f    &lt;- function(x1,x2) binorm(t(cbind(x1,x2)), m, Sig5)
+###############################################################
+x.s  &lt;- seq(from=min(x), to=max(x), by=0.1)
+vals &lt;- f(0.7, x.s)
+fx &lt;- dnorm(0.7, m[1], Sig5[1,1]^0.5)
+lines( vals-abs(min(x)), x.s, lty=2, lwd=1.5, col=&quot;blue&quot;)
+lines( vals/fx-abs(min(x)), x.s, lty=1, lwd=1.5, col=&quot;red&quot;)
+###############################################################
+text(1, -2, labels=expression(X==0.7))
+text(-2.0, 1.5, labels=expression( f(y / x==0.7) ), col=&quot;red&quot;)
+text(-2.2, 0.5, labels=expression( f(0.7, y) ),     col=&quot;blue&quot;)
+legend(-2, 3, c(&quot;sectional view at x=0.7&quot;,&quot;condi. dens. of Y at x=0.7&quot;),
+lty=c(2,1),col=c(&quot;blue&quot;,&quot;red&quot;),lwd=1.5)</code></pre>
+<p><img src="note2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy0, col=&quot;blue&quot;, drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main=&quot;Contour / Marginal Density&quot;, 
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = &quot;i&quot;, yaxs = &quot;i&quot;)
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+###############################################################
+# Marginal density function: Left side solid
+###############################################################
+marginal.X &lt;- function(x)  exp(-(x-m[1])^2/(2*Sig0[1,1])) / (sqrt(2*pi*Sig0[1,1]))
+# Left side solid
+vals &lt;- marginal.X(x.s)
+lines(vals-abs(min(x)), x.s, lty=1, lwd=2, col=&quot;red&quot;)
+text(-2.3, 0.5, labels=expression( f(y) ), col=&quot;red&quot;)
+legend(-2, 2.8, c(&quot;marginal denssity of Y&quot;),lty=c(1),col=c(&quot;red&quot;),lwd=2)</code></pre>
+<p><img src="note2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>par(lwd=2,mgp=c(2,1,0))
+contour(x, y, fxy5, col=&quot;blue&quot;, drawlabels=TRUE, nlevels=6,
+        xlab=expression(X), ylab=expression(Y), 
+        main=&quot;Contour / Marginal Density&quot;, 
+        lwd=2, xlim=range(x), ylim=range(y),
+        frame.plot=TRUE, axes=FALSE, xaxs = &quot;i&quot;, yaxs = &quot;i&quot;)
+axis(1, labels=TRUE, lwd.ticks=2)
+axis(2, labels=TRUE, lwd.ticks=2)
+###############################################################
+# Marginal density function: Left side solid
+###############################################################
+marginal.X &lt;- function(x)  exp(-(x-m[1])^2/(2*Sig5[1,1])) / (sqrt(2*pi*Sig5[1,1]))
+# Left side solid
+vals &lt;- marginal.X(x.s)
+lines(vals-abs(min(x)), x.s, lty=1, lwd=2, col=&quot;red&quot;)
+text(-2.3, 0.5, labels=expression( f(y) ), col=&quot;red&quot;)
+legend(-2, 2.8, c(&quot;marginal density of Y&quot;),lty=c(1),col=c(&quot;red&quot;),lwd=2)</code></pre>
+<p><img src="note2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+</div>
+<div id="matrix-algebra" class="section level2">
+<h2>Matrix Algebra</h2>
+</div>
+
+<script type="text/javascript" src="libs/fluidbox/jquery.fluidbox.min.js"></script>
+<script type="text/javascript" src="include/js/enable-fluidbox.js"></script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
